@@ -123,6 +123,7 @@ function cargarCancion(cancion) {
     songTitle.textContent = cancion.titulo;
     songDurationMs = cancion.duracion * 1000;
     timeElapsed = 0;
+    lastTimestamp = null; // <--- Clave resetear esto acá también
     activePauseRemaining = 0;
     pauseIndicator.classList.add('hidden');
 
@@ -134,7 +135,6 @@ function cargarCancion(cancion) {
         const div = document.createElement('div');
         div.className = 'lyric-line';
         
-        // Verificar si la línea es una marca de pausa, ej: [pause=12]
         const matchPausa = textoLinea.match(/\[pause=(\d+)\]/i);
         if (matchPausa) {
             const segundosPausa = parseInt(matchPausa[1]);
@@ -142,7 +142,7 @@ function cargarCancion(cancion) {
             div.textContent = `⏱ PAUSA DE ${segundosPausa} SEGUNDOS`;
             div.dataset.pauseDuration = segundosPausa;
         } else {
-            div.textContent = textoLinea || ' '; // Conservar renglones vacíos
+            div.textContent = textoLinea || ' ';
         }
         lyricsContent.appendChild(div);
     });
@@ -153,7 +153,6 @@ function cargarCancion(cancion) {
     screenList.classList.add('hidden');
     screenLyrics.classList.remove('hidden');
 
-    // Calcular mapeo de posiciones (darle un respiro al DOM para renderizar)
     setTimeout(() => {
         maxScrollTop = lyricsContainer.scrollHeight - lyricsContainer.clientHeight;
         mapearPosicionesLineas();
@@ -197,7 +196,6 @@ function autoScrollWorker(timestamp) {
     timeElapsed += delta;
     const progresoCancion = Math.min(timeElapsed / songDurationMs, 1);
     
-    // Si maxScrollTop se calculó mal o es cero, le damos un valor mínimo para forzar el movimiento en el testeo
     const scrollMaximo = maxScrollTop > 0 ? maxScrollTop : (lyricsContainer.scrollHeight - lyricsContainer.clientHeight);
     
     // Mover el contenedor de la letra
@@ -207,16 +205,20 @@ function autoScrollWorker(timestamp) {
     // Obtener la posición del borde superior de la caja de letras
     const contenedorTop = lyricsContainer.getBoundingClientRect().top;
 
-    // Verificar si alguna marca tocó el borde superior exacto
-    for (let pausa of linesWithPosition) {
-        if (!pausa.triggered) {
-            const marcaTop = pausa.elemento.getBoundingClientRect().top;
-            if (marcaTop <= contenedorTop + 5) { 
-                pausa.triggered = true;
-                activePauseRemaining = anisotropyFix(pausa.duration);
-                pauseIndicator.classList.remove('hidden');
-                pauseCountdown.textContent = Math.ceil(activePauseRemaining / 1000);
-                break; 
+    // EVITAR TRABA AL INICIO: Solo evaluar pausas si ya avanzamos un poquito en el tiempo
+    if (timeElapsed > 200) {
+        for (let pausa of linesWithPosition) {
+            if (!pausa.triggered) {
+                const marcaTop = pausa.elemento.getBoundingClientRect().top;
+                
+                // Si la marca cruza o toca el techo del contenedor
+                if (marcaTop <= contenedorTop + 5) { 
+                    pausa.triggered = true;
+                    activePauseRemaining = pausa.duration; // Usamos el valor directo de la duración
+                    pauseIndicator.classList.remove('hidden');
+                    pauseCountdown.textContent = Math.ceil(activePauseRemaining / 1000);
+                    break; 
+                }
             }
         }
     }
