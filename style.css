@@ -107,3 +107,41 @@ li:active {
     font-family: inherit;
     padding-bottom: 50vh; /* Permite que el final de la canción suba hasta el centro */
 }
+
+.btn-action {
+    background: #333;
+    color: #fff;
+    border: none;
+    padding: 12px 20px;
+    font-size: 1.1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.form-group {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-size: 1.2rem;
+    margin-bottom: 5px;
+    color: #bbb;
+}
+
+.form-group input, .form-group textarea {
+    background-color: #222;
+    border: 1px solid #444;
+    color: #fff;
+    padding: 12px;
+    font-size: 1.2rem;
+    border-radius: 6px;
+    width: 100%;
+}
+
+.form-group input:focus, .form-group textarea:focus {
+    border-color: #ffb300;
+    outline: none;
+}
