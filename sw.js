@@ -33,8 +33,17 @@ self.addEventListener('activate', (e) => {
 
 self.addEventListener('fetch', (e) => {
   e.respondWith(
-    caches.match(e.request).then((cachedResponse) => {
-      return cachedResponse || fetch(e.request);
-    })
+    fetch(e.request)
+      .then((response) => {
+        // Si hay internet, clonamos la respuesta y la guardamos actualizada
+        return caches.open(CACHE_NAME).then((cache) => {
+          cache.put(e.request, response.clone());
+          return response;
+        });
+      })
+      .catch(() => {
+        // SI NO HAY INTERNET (Offline), recién ahí va a buscar a la caché
+        return caches.match(e.request);
+      })
   );
 });
