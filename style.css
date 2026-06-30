@@ -95,7 +95,8 @@ li:active {
 
 /* Contenedor de la letra con scroll automático */
 #lyrics-container {
-    flex: 1; /* Hace que ocupe TODO el espacio vertical que sobre en la pantalla */
+    flex: 1; 
+    height: 0; /* <--- TRUCO CLAVE: Obliga al navegador a calcular el desborde real del texto */
     overflow-y: auto;
     padding: 15px;
     border: 1px solid #333;

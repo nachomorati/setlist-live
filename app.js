@@ -237,14 +237,14 @@ function anisotropyFix(duration) {
 }
 
 function startAutoscroll() {
-    // REASEGURO: Forzamos a la app a calcular el tamaño real del contenedor en el segundo que das PLAY
+    // Forzamos el cálculo de la altura máxima real con el nuevo CSS corregido
     maxScrollTop = lyricsContainer.scrollHeight - lyricsContainer.clientHeight;
     mapearPosicionesLineas();
 
     isScrolling = true;
     btnPlay.textContent = "⏸ Pausar Scroll";
     btnPlay.style.backgroundColor = "#e65100";
-    lastTimestamp = null; // Reseteamos el reloj para que no pegue un salto
+    lastTimestamp = null; 
     scrollInterval = requestAnimationFrame(autoScrollWorker);
 }
 
