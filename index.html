@@ -14,6 +14,7 @@
             <h1>Setlist</h1>
             <button id="btn-add-song" class="btn-action">➕ Agregar</button>
         </div>
+        <p style="color: #888; margin-bottom: 15px; font-size: 0.9rem;">💡 Mantené presionado y arrastrá para reordenar los temas.</p>
         <ul id="setlist-container"></ul>
     </div>
 
@@ -30,8 +31,13 @@
             <button id="btn-reset-scroll">🔄 Reiniciar</button>
         </div>
 
+        <!-- Alerta flotante de pausa instrumental -->
+        <div id="pause-indicator" class="hidden">🎸 PAUSA INSTRUMENTAL: <span id="pause-countdown">0</span>s</div>
+
         <div id="lyrics-container">
-            <pre id="lyrics-text"></pre>
+            <div id="lyrics-content">
+                <!-- Aquí se inyectará la letra procesada en líneas -->
+            </div>
         </div>
     </div>
 
@@ -48,12 +54,12 @@
 
             <div class="form-group">
                 <label>Duración estimada (en segundos):</label>
-                <input type="number" id="form-duracion" required placeholder="Ej: 240 (son 4 minutos)">
+                <input type="number" id="form-duracion" required placeholder="Ej: 240">
             </div>
 
             <div class="form-group">
-                <label>Letra:</label>
-                <textarea id="form-letra" required rows="12" placeholder="Pegá la letra acá..."></textarea>
+                <label>Letra (Soporta pausas automáticas ej: [pause=15]):</label>
+                <textarea id="form-letra" required rows="12" placeholder="Pegá la letra acá...&#10;Podés poner marcas como [pause=10] en un renglón vacío para congelar el scroll 10 segundos en los solos de guitarra."></textarea>
             </div>
 
             <div style="display: flex; gap: 10px; margin-top: 20px;">

@@ -146,3 +146,57 @@ li:active {
     border-color: #ffb300;
     outline: none;
 }
+
+/* Estilos de Arrastre para la lista */
+li.dragging {
+    opacity: 0.5;
+    background-color: #333;
+    border: 2px dashed #ffb300;
+}
+
+/* Cartel flotante de pausa instrumental */
+#pause-indicator {
+    background-color: #d84315;
+    color: white;
+    padding: 15px;
+    font-size: 1.6rem;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 0.8; }
+    50% { opacity: 1; }
+    100% { opacity: 0.8; }
+}
+
+/* Modificación para albergar líneas individuales de letra */
+#lyrics-container {
+    height: 65vh;
+    overflow-y: auto;
+    padding: 15px;
+    border: 1px solid #333;
+    background-color: #0a0a0a;
+    border-radius: 8px;
+}
+
+#lyrics-content {
+    font-size: 2.2rem;
+    line-height: 1.6;
+    font-family: inherit;
+    padding-bottom: 50vh;
+}
+
+/* Estilo para las etiquetas de pausa que se ven en la letra */
+.lyric-line.pause-marker {
+    color: #ffb300;
+    font-weight: bold;
+    font-size: 1.6rem;
+    border-top: 1px dashed #444;
+    border-bottom: 1px dashed #444;
+    padding: 5px 0;
+    margin: 10px 0;
+}
