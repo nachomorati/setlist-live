@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setlist Live</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="screen-list" class="screen">
+        <h1>Setlist</h1>
+        <ul id="setlist-container">
+            </ul>
+    </div>
+
+    <div id="screen-lyrics" class="screen hidden">
+        <button id="btn-back">⬅ Volver</button>
+        <h2 id="song-title">Título de la Canción</h2>
+        
+        <div id="controls">
+            <button id="btn-play-scroll">▶ Iniciar Scroll</button>
+            <button id="btn-reset-scroll">🔄 Reiniciar</button>
+        </div>
+
+        <div id="lyrics-container">
+            <pre id="lyrics-text">Letra aquí...</pre>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
