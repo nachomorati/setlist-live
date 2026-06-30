@@ -190,3 +190,22 @@ if ('serviceWorker' in navigator) {
 }
 
 init();
+
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./sw.js')
+        .then((reg) => {
+            console.log("Service Worker Registrado con éxito");
+            
+            // Si hay un SW nuevo esperando, avisarle que se active
+            reg.onupdatefound = () => {
+                const installingWorker = reg.installing;
+                installingWorker.onstatechange = () => {
+                    if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                        console.log("Nueva versión disponible. Reinstalando...");
+                        window.location.reload(); // Recarga solo para aplicar los cambios
+                    }
+                };
+            };
+        })
+        .catch(err => console.log("Error al registrar SW:", err));
+}
