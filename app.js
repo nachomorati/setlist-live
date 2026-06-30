@@ -159,25 +159,27 @@ function cargarCancion(cancion) {
     }, 100);
 }
 
+// 1. REEMPLAZAR: Mapeo simplificado (ya no necesitamos calcular offsets fijos)
 function mapearPosicionesLineas() {
     linesWithPosition = [];
+    // Buscamos todas las marcas de pausa que están renderizadas en pantalla
     const nodosLineas = lyricsContent.querySelectorAll('.lyric-line.pause-marker');
     nodosLineas.forEach(nodo => {
         linesWithPosition.push({
-            offsetTop: nodo.offsetTop - 80, // Ajuste para que frene un poco antes del centro de la pantalla
+            elemento: nodo, // Guardamos la referencia directa al elemento del DOM
             duration: parseInt(nodo.dataset.pauseDuration) * 1000,
             triggered: false
         });
     });
 }
 
-// 3. MOTOR DE SCROLL DINÁMICO CON AGREGADO DE TIEMPO
+// 2. REEMPLAZAR: El motor de scroll con detección geométrica en tiempo real
 function autoScrollWorker(timestamp) {
     if (!lastTimestamp) lastTimestamp = timestamp;
     const delta = timestamp - lastTimestamp;
     lastTimestamp = timestamp;
 
-    // Manejo del estado de pausa instrumental activa
+    // Manejo de la pausa instrumental activa
     if (activePauseRemaining > 0) {
         activePauseRemaining -= delta;
         pauseCountdown.textContent = Math.ceil(activePauseRemaining / 1000);
@@ -190,27 +192,35 @@ function autoScrollWorker(timestamp) {
         return;
     }
 
-    // Avanzar reloj global de la canción
+    // Avanzar el tiempo real de la canción
     timeElapsed += delta;
     const progresoCancion = Math.min(timeElapsed / songDurationMs, 1);
     
-    // Mover Scroll
+    // Mover el contenedor de la letra
     const targetScroll = maxScrollTop * progresoCancion;
     lyricsContainer.scrollTop = targetScroll;
 
-    // Verificar si cruzamos una marca de pausa instrumental
-    const actualScrollPos = lyricsContainer.scrollTop;
+    // Obtener la posición del borde superior de la caja de letras
+    const contenedorTop = lyricsContainer.getBoundingClientRect().top;
+
+    // Verificar si alguna marca tocó el borde superior exacto
     for (let pausa of linesWithPosition) {
-        if (!pausa.triggered && actualScrollPos >= pausa.offsetTop) {
-            pausa.triggered = true;
-            activePauseRemaining = anisotropyFix(pausa.duration);
-            pauseIndicator.classList.remove('hidden');
-            pauseCountdown.textContent = Math.ceil(activePauseRemaining / 1000);
-            break;
+        if (!pausa.triggered) {
+            // Medimos la distancia de la marca respecto al borde superior del contenedor
+            const marcaTop = pausa.elemento.getBoundingClientRect().top;
+            
+            // Si la distancia es menor o igual a cero (o sea, tocó o pasó el borde de arriba)
+            if (marcaTop <= contenedorTop + 5) { // +5 píxeles de margen de tolerancia física
+                pausa.triggered = true;
+                activePauseRemaining = anisotropyFix(pausa.duration);
+                pauseIndicator.classList.remove('hidden');
+                pauseCountdown.textContent = Math.ceil(activePauseRemaining / 1000);
+                break; // Cortamos el bucle para activar una pausa a la vez
+            }
         }
     }
 
-    // Continuar si la canción no terminó
+    // Continuar la animación si no terminó la canción
     if (progresoCancion < 1 && isScrolling) {
         scrollInterval = requestAnimationFrame(autoScrollWorker);
     } else if (progresoCancion >= 1) {
