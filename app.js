@@ -119,7 +119,7 @@ btnAddSong.addEventListener('click', () => {
     formId.value = "";
     songForm.reset();
     screenList.classList.add('hidden');
-    screenForm.remove('hidden');
+    screenForm.classList.remove('hidden'); // <--- Asegurate de que tenga .classList
 });
 
 // Abrir formulario para Editar la Canción actual
