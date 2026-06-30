@@ -316,28 +316,26 @@ if ('serviceWorker' in navigator) {
 const btnExport = document.getElementById('btn-export');
 const inputImport = document.getElementById('input-import');
 
-// Función para exportar las canciones a un archivo JSON
+// Exportar como .txt
 btnExport.addEventListener('click', () => {
     if (canciones.length === 0) {
         alert("No hay canciones para exportar.");
         return;
     }
     
-    // Convertimos el array de canciones a un texto plano JSON
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(canciones));
+    const dataStr = "data:text/plain;charset=utf-8," + encodeURIComponent(JSON.stringify(canciones));
     
-    // Creamos un elemento temporal de descarga
     const downloadAnchor = document.createElement('a');
     downloadAnchor.setAttribute("href", dataStr);
-    downloadAnchor.setAttribute("download", "setlist_oficial.json");
+    downloadAnchor.setAttribute("download", "setlist_oficial.txt"); // <--- Ahora es .txt
     document.body.appendChild(downloadAnchor);
     
-    downloadAnchor.click(); // Forzamos la descarga
+    downloadAnchor.click();
     downloadAnchor.remove();
 });
 
-// Función para importar las canciones desde el archivo JSON enviado por WhatsApp
-inputImport.addEventListener('addEventListener' in inputImport ? 'change' : 'change', (e) => {
+// Importar desde .txt
+inputImport.addEventListener('change', (e) => {
     const archivo = e.target.files[0];
     if (!archivo) return;
 
@@ -346,19 +344,18 @@ inputImport.addEventListener('addEventListener' in inputImport ? 'change' : 'cha
         try {
             const cancionesImportadas = JSON.parse(evento.target.result);
             
-            // Validar que el archivo contenga un formato correcto
             if (Array.isArray(cancionesImportadas)) {
                 if (confirm(`¿Querés reemplazar tu lista actual por las ${cancionesImportadas.length} canciones del archivo?`)) {
                     canciones = cancionesImportadas;
-                    guardarEnStorage(); // Guarda localmente
-                    init(); // Refresca la pantalla
+                    guardarEnStorage();
+                    init();
                     alert("¡Setlist actualizado con éxito para el vivo!");
                 }
             } else {
                 alert("El archivo no tiene el formato de setlist correcto.");
             }
         } catch (error) {
-            alert("Error al leer el archivo de configuración.");
+            alert("Error al leer el archivo. Asegurate de que sea el .txt correcto.");
         }
     };
     lector.readAsText(archivo);
