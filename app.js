@@ -10,6 +10,7 @@ let canciones = JSON.parse(localStorage.getItem('setlist_canciones')) || [
 ];
 
 // Variables de estado del scroll
+let currentSongId = null;
 let scrollInterval = null;
 let isScrolling = false;
 let songDurationMs = 0;
