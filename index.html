@@ -8,15 +8,22 @@
 </head>
 <body>
 
+    <!-- PANTALLA 1: LISTA DE CANCIONES -->
     <div id="screen-list" class="screen">
-        <h1>Setlist</h1>
-        <ul id="setlist-container">
-            </ul>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h1>Setlist</h1>
+            <button id="btn-add-song" class="btn-action">➕ Agregar</button>
+        </div>
+        <ul id="setlist-container"></ul>
     </div>
 
+    <!-- PANTALLA 2: VISTA EN VIVO (LETRA) -->
     <div id="screen-lyrics" class="screen hidden">
-        <button id="btn-back">⬅ Volver</button>
-        <h2 id="song-title">Título de la Canción</h2>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+            <button id="btn-back" class="btn-action">⬅ Volver</button>
+            <button id="btn-edit-song" class="btn-action" style="background-color: #0288d1;">✏️ Editar</button>
+        </div>
+        <h2 id="song-title">Título</h2>
         
         <div id="controls">
             <button id="btn-play-scroll">▶ Iniciar Scroll</button>
@@ -24,8 +31,36 @@
         </div>
 
         <div id="lyrics-container">
-            <pre id="lyrics-text">Letra aquí...</pre>
+            <pre id="lyrics-text"></pre>
         </div>
+    </div>
+
+    <!-- PANTALLA 3: FORMULARIO (AGREGAR / EDITAR) -->
+    <div id="screen-form" class="screen hidden">
+        <h2 id="form-title" style="margin-bottom: 20px; color: #ffb300;">Agregar Canción</h2>
+        <form id="song-form">
+            <input type="hidden" id="form-id">
+            
+            <div class="form-group">
+                <label>Título de la canción:</label>
+                <input type="text" id="form-titulo" required placeholder="Ej: Peor para el Sol">
+            </div>
+
+            <div class="form-group">
+                <label>Duración estimada (en segundos):</label>
+                <input type="number" id="form-duracion" required placeholder="Ej: 240 (son 4 minutos)">
+            </div>
+
+            <div class="form-group">
+                <label>Letra:</label>
+                <textarea id="form-letra" required rows="12" placeholder="Pegá la letra acá..."></textarea>
+            </div>
+
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <button type="submit" class="btn-action" style="background-color: #2e7d32; flex: 1;">💾 Guardar</button>
+                <button type="button" id="btn-cancel-form" class="btn-action" style="background-color: #c62828;">❌ Cancelar</button>
+            </div>
+        </form>
     </div>
 
     <script src="app.js"></script>
