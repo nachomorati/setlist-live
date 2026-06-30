@@ -16,6 +16,14 @@
         </div>
         <p style="color: #888; margin-bottom: 15px; font-size: 0.9rem;">💡 Mantené presionado y arrastrá para reordenar los temas.</p>
         <ul id="setlist-container"></ul>
+        <!-- NUEVA SECCIÓN: SINCRONIZACIÓN -->
+        <div style="margin-top: auto; padding-top: 30px; border-top: 1px solid #333; display: flex; gap: 10px;">
+            <button id="btn-export" class="btn-action" style="background-color: #455a64; flex: 1; font-size: 0.9rem;">📤 Exportar Setlist</button>
+            <label class="btn-action" style="background-color: #37474f; flex: 1; font-size: 0.9rem; text-align: center; cursor: pointer;">
+                📥 Importar Setlist
+                <input type="file" id="input-import" accept=".json" style="display: none;">
+            </label>
+        </div>
     </div>
 
     <!-- PANTALLA 2: VISTA EN VIVO (LETRA) -->
