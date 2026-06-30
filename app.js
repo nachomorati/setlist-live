@@ -197,8 +197,11 @@ function autoScrollWorker(timestamp) {
     timeElapsed += delta;
     const progresoCancion = Math.min(timeElapsed / songDurationMs, 1);
     
+    // Si maxScrollTop se calculó mal o es cero, le damos un valor mínimo para forzar el movimiento en el testeo
+    const scrollMaximo = maxScrollTop > 0 ? maxScrollTop : (lyricsContainer.scrollHeight - lyricsContainer.clientHeight);
+    
     // Mover el contenedor de la letra
-    const targetScroll = maxScrollTop * progresoCancion;
+    const targetScroll = scrollMaximo * progresoCancion;
     lyricsContainer.scrollTop = targetScroll;
 
     // Obtener la posición del borde superior de la caja de letras
@@ -207,16 +210,13 @@ function autoScrollWorker(timestamp) {
     // Verificar si alguna marca tocó el borde superior exacto
     for (let pausa of linesWithPosition) {
         if (!pausa.triggered) {
-            // Medimos la distancia de la marca respecto al borde superior del contenedor
             const marcaTop = pausa.elemento.getBoundingClientRect().top;
-            
-            // Si la distancia es menor o igual a cero (o sea, tocó o pasó el borde de arriba)
-            if (marcaTop <= contenedorTop + 5) { // +5 píxeles de margen de tolerancia física
+            if (marcaTop <= contenedorTop + 5) { 
                 pausa.triggered = true;
                 activePauseRemaining = anisotropyFix(pausa.duration);
                 pauseIndicator.classList.remove('hidden');
                 pauseCountdown.textContent = Math.ceil(activePauseRemaining / 1000);
-                break; // Cortamos el bucle para activar una pausa a la vez
+                break; 
             }
         }
     }
@@ -235,10 +235,14 @@ function anisotropyFix(duration) {
 }
 
 function startAutoscroll() {
+    // REASEGURO: Forzamos a la app a calcular el tamaño real del contenedor en el segundo que das PLAY
+    maxScrollTop = lyricsContainer.scrollHeight - lyricsContainer.clientHeight;
+    mapearPosicionesLineas();
+
     isScrolling = true;
     btnPlay.textContent = "⏸ Pausar Scroll";
     btnPlay.style.backgroundColor = "#e65100";
-    lastTimestamp = null;
+    lastTimestamp = null; // Reseteamos el reloj para que no pegue un salto
     scrollInterval = requestAnimationFrame(autoScrollWorker);
 }
 
