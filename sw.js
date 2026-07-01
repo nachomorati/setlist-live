@@ -1,5 +1,5 @@
 // sw.js
-const CACHE_NAME = 'setlist-live-v9';
+const CACHE_NAME = 'setlist-live-v10';
 const ASSETS = [
   './',
   './index.html',

@@ -17,8 +17,7 @@ body {
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    height: calc(100vh - 40px); 
-    overflow: hidden; 
+    min-height: calc(100vh - 40px); 
 }
 
 .hidden {
@@ -177,4 +176,9 @@ li.dragging {
     border-bottom: 1px dashed #444;
     padding: 8px 0;
     margin: 15px 0;
+}
+
+#screen-lyrics {
+    height: calc(100vh - 40px); /* Clava la pantalla de la letra al visor */
+    overflow: hidden; /* Evita que la pantalla entera de la letra se estire */
 }
