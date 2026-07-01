@@ -17,7 +17,9 @@ body {
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    min-height: calc(100vh - 40px);
+    /* CAMBIO CLAVE: Cambiamos min-height por height fija para clavar la pantalla al visor */
+    height: calc(100vh - 40px); 
+    overflow: hidden; /* Evita que la pantalla general se estire hacia abajo */
 }
 
 .hidden {
