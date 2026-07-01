@@ -152,6 +152,22 @@ function cargarCancion(cancion) {
 
     screenList.classList.add('hidden');
     screenLyrics.classList.remove('hidden');
+
+    lyricsContainer.scrollTop = 0;
+    stopAutoscroll();
+
+    screenList.classList.add('hidden');
+    screenLyrics.classList.remove('hidden');
+
+    // 🔥 INYECCIÓN DIRECTA PARA SALTEAR LA CACHÉ DEL CSS:
+    lyricsContent.style.fontSize = "2.6rem";
+    lyricsContent.style.lineHeight = "1.7";
+    lyricsContent.style.paddingBottom = "80vh"; // Forzamos el desborde hacia abajo sí o sí
+
+    setTimeout(() => {
+        maxScrollTop = lyricsContainer.scrollHeight - lyricsContainer.clientHeight;
+        mapearPosicionesLineas();
+    }, 100);
 }
 
 // 1. REEMPLAZAR: Mapeo simplificado (ya no necesitamos calcular offsets fijos)
