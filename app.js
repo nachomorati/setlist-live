@@ -14,7 +14,7 @@ let currentSongId = null;
 let scrollInterval = null;
 let isScrolling = false;
 let songDurationMs = 0;
-let timeElapsed = 0; // Tiempo reproducido real en milisegundos
+let timeElapsed = 0; 
 let lastTimestamp = null;
 let maxScrollTop = 0;
 
@@ -153,16 +153,9 @@ function cargarCancion(cancion) {
     screenList.classList.add('hidden');
     screenLyrics.classList.remove('hidden');
 
-    lyricsContainer.scrollTop = 0;
-    stopAutoscroll();
-
-    screenList.classList.add('hidden');
-    screenLyrics.classList.remove('hidden');
-
-    // 🔥 INYECCIÓN DIRECTA PARA SALTEAR LA CACHÉ DEL CSS:
     lyricsContent.style.fontSize = "2.6rem";
     lyricsContent.style.lineHeight = "1.7";
-    lyricsContent.style.paddingBottom = "80vh"; // Forzamos el desborde hacia abajo sí o sí
+    lyricsContent.style.paddingBottom = "80vh"; 
 
     setTimeout(() => {
         maxScrollTop = lyricsContainer.scrollHeight - lyricsContainer.clientHeight;
@@ -170,7 +163,6 @@ function cargarCancion(cancion) {
     }, 100);
 }
 
-// 1. REEMPLAZAR: Mapeo simplificado (ya no necesitamos calcular offsets fijos)
 function mapearPosicionesLineas() {
     linesWithPosition = [];
     // Buscamos todas las marcas de pausa que están renderizadas en pantalla
@@ -184,7 +176,6 @@ function mapearPosicionesLineas() {
     });
 }
 
-// 2. REEMPLAZAR: El motor de scroll con detección geométrica en tiempo real
 function autoScrollWorker(timestamp) {
     if (!lastTimestamp) lastTimestamp = timestamp;
     const delta = timestamp - lastTimestamp;
@@ -219,7 +210,6 @@ function autoScrollWorker(timestamp) {
     // Obtener la posición del borde superior de la caja de letras
     const contenedorTop = lyricsContainer.getBoundingClientRect().top;
 
-    // EVITAR TRABA AL INICIO: Solo evaluar pausas si ya avanzamos un poquito en el tiempo
     if (timeElapsed > 200) {
         for (let pausa of linesWithPosition) {
             if (!pausa.triggered) {
@@ -237,7 +227,6 @@ function autoScrollWorker(timestamp) {
         }
     }
 
-    // Continuar la animación si no terminó la canción
     if (progresoCancion < 1 && isScrolling) {
         scrollInterval = requestAnimationFrame(autoScrollWorker);
     } else if (progresoCancion >= 1) {
@@ -251,12 +240,8 @@ function anisotropyFix(duration) {
 }
 
 function startAutoscroll() {
-    // MEDICIÓN QUIRÚRGICA: Medimos acá, con la pantalla ya abierta y visible al 100%
     maxScrollTop = lyricsContainer.scrollHeight - lyricsContainer.clientHeight;
     mapearPosicionesLineas();
-
-    // CHIVATO EN CONSOLA: Si esto te dice 0 en la pantalla, encontramos al culpable.
-    console.log("Altura máxima calculada para el scroll:", maxScrollTop);
 
     isScrolling = true;
     btnPlay.textContent = "⏸ Pausar Scroll";
