@@ -147,19 +147,26 @@ function cargarCancion(cancion) {
         lyricsContent.appendChild(div);
     });
 
-    lyricsContainer.scrollTop = 0;
     stopAutoscroll();
 
+    // Cambiamos primero la visibilidad de las pantallas...
     screenList.classList.add('hidden');
     screenLyrics.classList.remove('hidden');
 
+    // 🔥 SOLUCIÓN AL DETALLE 2: Forzamos el reset del scroll acá, 
+    // con la pantalla ya visible para que el navegador responda sí o sí
+    lyricsContainer.scrollTop = 0;
+
+    // Aplicamos los estilos directos anti-caché
     lyricsContent.style.fontSize = "2.6rem";
     lyricsContent.style.lineHeight = "1.7";
-    lyricsContent.style.paddingBottom = "80vh"; 
+    lyricsContent.style.paddingBottom = "80vh";
 
     setTimeout(() => {
         maxScrollTop = lyricsContainer.scrollHeight - lyricsContainer.clientHeight;
         mapearPosicionesLineas();
+        // Doble reaseguro por si el renderizado tardó un milisegundo
+        lyricsContainer.scrollTop = 0;
     }, 100);
 }
 
@@ -242,6 +249,7 @@ function anisotropyFix(duration) {
 function startAutoscroll() {
     maxScrollTop = lyricsContainer.scrollHeight - lyricsContainer.clientHeight;
     
+    // Sincronizar el reloj si moviste la letra con el dedo
     if (lyricsContainer.scrollTop > 0 && maxScrollTop > 0) {
         const posicionActual = lyricsContainer.scrollTop;
         const porcentajeLeido = posicionActual / maxScrollTop;
@@ -250,6 +258,18 @@ function startAutoscroll() {
     }
 
     mapearPosicionesLineas();
+
+    // 🔥 SOLUCIÓN AL DETALLE 1: Saltar automáticamente las pausas instrumentales pasadas
+    const contenedorTop = lyricsContainer.getBoundingClientRect().top;
+    linesWithPosition.forEach(p => {
+        if (p.elemento) {
+            const marcaTop = p.elemento.getBoundingClientRect().top;
+            // Si la marca de pausa ya está por encima del techo actual del contenedor, la quemamos
+            if (marcaTop < contenedorTop) {
+                p.triggered = true;
+            }
+        }
+    });
 
     isScrolling = true;
     btnPlay.textContent = "⏸ Pausar Scroll";
