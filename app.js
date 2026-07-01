@@ -3,9 +3,9 @@
 let canciones = JSON.parse(localStorage.getItem('setlist_canciones')) || [
     {
         id: 1,
-        titulo: "Cheques",
+        titulo: "Un pacto (muestra)",
         duracion: 240,
-        letra: "Ella utiliza mis cheques de viajero...\n\n[pause=15]\n(Solo de Guitarra - Scroll Pausado)\n\nQuiero verla de nuevo."
+        letra: "Un pacto para vivir\nOdiándonos sol a sol\nRevolviendo más\nEn los restos de un amor\nCon un camino recto\nA la desesperación\nDesenlace en un cuento de terror\n\nSeis años así\nEscapando a un mismo lugar\nCon mi fantasía Buscando otro cuerpo, otra voz Fui consumiendo infiernos Para salir de vos Intoxicado, loco y sin humor"
     }
 ];
 
