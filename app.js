@@ -195,7 +195,10 @@ function autoScrollWorker(timestamp) {
     
     // Mover el contenedor de la letra
     const targetScroll = scrollMaximo * progresoCancion;
+    
+    // REFUERZO DE SCROLL: Forzamos el movimiento en ambos contenedores por si acaso
     lyricsContainer.scrollTop = targetScroll;
+    lyricsContent.scrollTop = targetScroll; // <--- Línea de seguridad para el Flexbox
 
     // Obtener la posición del borde superior de la caja de letras
     const contenedorTop = lyricsContainer.getBoundingClientRect().top;
@@ -209,7 +212,7 @@ function autoScrollWorker(timestamp) {
                 // Si la marca cruza o toca el techo del contenedor
                 if (marcaTop <= contenedorTop + 5) { 
                     pausa.triggered = true;
-                    activePauseRemaining = pausa.duration; // Usamos el valor directo de la duración
+                    activePauseRemaining = pausa.duration;
                     pauseIndicator.classList.remove('hidden');
                     pauseCountdown.textContent = Math.ceil(activePauseRemaining / 1000);
                     break; 
