@@ -241,6 +241,14 @@ function anisotropyFix(duration) {
 
 function startAutoscroll() {
     maxScrollTop = lyricsContainer.scrollHeight - lyricsContainer.clientHeight;
+    
+    if (lyricsContainer.scrollTop > 0 && maxScrollTop > 0) {
+        const posicionActual = lyricsContainer.scrollTop;
+        const porcentajeLeido = posicionActual / maxScrollTop;
+        
+        timeElapsed = songDurationMs * porcentajeLeido;
+    }
+
     mapearPosicionesLineas();
 
     isScrolling = true;
