@@ -123,11 +123,11 @@ function cargarCancion(cancion) {
     songTitle.textContent = cancion.titulo;
     songDurationMs = cancion.duracion * 1000;
     timeElapsed = 0;
-    lastTimestamp = null; // <--- Clave resetear esto acá también
+    lastTimestamp = null; 
     activePauseRemaining = 0;
     pauseIndicator.classList.add('hidden');
 
-    // Procesar la letra línea por línea buscando marcas de [pause=X]
+    // Procesar la letra línea por línea
     lyricsContent.innerHTML = '';
     const lineasRaw = cancion.letra.split('\n');
     
@@ -152,11 +152,6 @@ function cargarCancion(cancion) {
 
     screenList.classList.add('hidden');
     screenLyrics.classList.remove('hidden');
-
-    setTimeout(() => {
-        maxScrollTop = lyricsContainer.scrollHeight - lyricsContainer.clientHeight;
-        mapearPosicionesLineas();
-    }, 100);
 }
 
 // 1. REEMPLAZAR: Mapeo simplificado (ya no necesitamos calcular offsets fijos)
@@ -237,9 +232,12 @@ function anisotropyFix(duration) {
 }
 
 function startAutoscroll() {
-    // Forzamos el cálculo de la altura máxima real con el nuevo CSS corregido
+    // MEDICIÓN QUIRÚRGICA: Medimos acá, con la pantalla ya abierta y visible al 100%
     maxScrollTop = lyricsContainer.scrollHeight - lyricsContainer.clientHeight;
     mapearPosicionesLineas();
+
+    // CHIVATO EN CONSOLA: Si esto te dice 0 en la pantalla, encontramos al culpable.
+    console.log("Altura máxima calculada para el scroll:", maxScrollTop);
 
     isScrolling = true;
     btnPlay.textContent = "⏸ Pausar Scroll";
