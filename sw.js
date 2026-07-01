@@ -1,5 +1,5 @@
 // sw.js
-const CACHE_NAME = 'setlist-live-v3'; // <--- Cambiamos a v2 para forzar la actualización
+const CACHE_NAME = 'setlist-live-v4';
 const ASSETS = [
   './',
   './index.html',
